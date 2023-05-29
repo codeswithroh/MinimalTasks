@@ -1,10 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { Client, Databases, Query } from "appwrite";
 import NavBar from "../NavBar";
 import AddTasks from "./AddTasks";
 import ShowTasks from "./ShowTasks";
 import { useSession } from "../../hooks/context";
-import { Button } from "@mui/material";
 
 const client = new Client()
   .setEndpoint("https://cloud.appwrite.io/v1")
