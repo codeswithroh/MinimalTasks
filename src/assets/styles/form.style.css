@@ -1,0 +1,23 @@
+.form {
+  width: 50vw;
+  height: 50vh;
+  background-color: #f4f3f6;
+  border-radius: 10px;
+  padding: 1em 0;
+}
+
+input {
+  margin: 0 auto;
+  padding: 1em 0.75em;
+  width: 50%;
+}
+
+button {
+  font-weight: bold;
+  color: #f4f3f6;
+  background-color: #81688d;
+  font-size: 1em;
+  border-radius: 1.5em;
+  border: none;
+  padding: 0.75em 2em;
+}
