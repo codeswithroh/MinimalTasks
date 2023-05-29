@@ -29,7 +29,7 @@ function AddTasks({ databases, fetchTasks }) {
       "64705278328cb66c07fd",
       ID.unique(),
       {
-        userId: session?.$id,
+        userId: session?.userId,
         title: taskInput,
         done: false,
         important: false,

@@ -1,4 +1,4 @@
-import React, { lazy, useEffect } from "react";
+import React, { lazy, Suspense, useEffect } from "react";
 import "./App.css";
 import "./assets/styles/form.style.css";
 import "./assets/styles/layout.style.css";
@@ -22,8 +22,6 @@ const appWriteAccount = new Account(client);
 const ProtectedRoute = ({ children }) => {
   const navigate = useNavigate();
   const { session } = useSession();
-
-  console.log(session, "rohit");
 
   useEffect(() => {
     if (!session) {
@@ -57,13 +55,13 @@ function App() {
   ]);
 
   return (
-    <div className="App">
-      <React.StrictMode>
+    <Suspense fallback={<>Loading...</>}>
+      <div className="App">
         <SessionProvider>
           <RouterProvider router={router} />
         </SessionProvider>
-      </React.StrictMode>
-    </div>
+      </div>
+    </Suspense>
   );
 }
 

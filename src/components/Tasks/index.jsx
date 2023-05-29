@@ -20,7 +20,7 @@ function Tasks() {
     const res = await databases.listDocuments(
       "6470526679415457d3f1",
       "64705278328cb66c07fd",
-      [Query.equal("userId", [`${session?.$id}`])]
+      [Query.equal("userId", [`${session?.userId}`])]
     );
     setTasks(res.documents);
   };
