@@ -1,39 +1,242 @@
-import React from "react";
-import { useSession } from "../hooks/context";
+import * as React from "react";
+import { styled, useTheme } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Drawer from "@mui/material/Drawer";
+import MuiAppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import CssBaseline from "@mui/material/CssBaseline";
 import { useNavigate } from "react-router-dom";
+import List from "@mui/material/List";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import MailIcon from "@mui/icons-material/Mail";
+import { useSession } from "../hooks/context";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
+import LoginIcon from "@mui/icons-material/Login";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
+import AssignmentLateIcon from "@mui/icons-material/AssignmentLate";
 
-function NavBar() {
+const drawerWidth = 240;
+
+const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
+  ({ theme, open }) => ({
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginRight: -drawerWidth,
+    ...(open && {
+      transition: theme.transitions.create("margin", {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      marginRight: 0,
+    }),
+  })
+);
+
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  backgroundColor: "transparent",
+  boxShadow: "none",
+  color: "black",
+  transition: theme.transitions.create(["margin", "width"], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginRight: drawerWidth,
+  }),
+}));
+
+const DrawerHeader = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  width: "100%",
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+  justifyContent: "flex-start",
+}));
+
+export default function NavBar({ children }) {
   const { session, setSession } = useSession();
   const navigate = useNavigate();
+  const theme = useTheme();
+  const [open, setOpen] = React.useState(false);
 
-  const handleRegister = () => {
-    navigate("/signup");
-  };
-  const handleLogin = () => {
-    navigate("/login");
-  };
+  const initialSideBar = [
+    {
+      text: "SignUp",
+      icon: (
+        <IconButton aria-label="signup">
+          <HowToRegIcon />
+        </IconButton>
+      ),
+      onClick: () => navigate("/signup"),
+    },
+    {
+      text: "Login",
+      icon: (
+        <IconButton aria-label="login">
+          <LoginIcon />
+        </IconButton>
+      ),
+      onClick: () => navigate("/login"),
+    },
+  ];
+
+  const initialCategorySideBar = [
+    {
+      text: "Incomplete",
+      icon: (
+        <IconButton aria-label="incomplete">
+          <AssignmentIcon />
+        </IconButton>
+      ),
+      onClick: () => navigate("/tasks/incomplete"),
+    },
+    {
+      text: "Completed",
+      icon: (
+        <IconButton aria-label="complete">
+          <AssignmentTurnedInIcon />
+        </IconButton>
+      ),
+      onClick: () => navigate("/tasks/complete"),
+    },
+    {
+      text: "Important",
+      icon: (
+        <IconButton aria-label="important">
+          <AssignmentLateIcon />
+        </IconButton>
+      ),
+      onClick: () => navigate("/tasks/important"),
+    },
+  ];
+
   const handleLogout = () => {
     setSession(null);
     localStorage.removeItem("session");
     navigate("/login");
   };
 
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
   return (
-    <div className="nav flex-row">
-      <div className="text-2">MinimalTasks</div>
-      {!session && (
-        <div className="flex-row" style={{ marginLeft: "auto" }}>
-          <button onClick={handleRegister}>Register</button>
-          <button onClick={handleLogin}>Login</button>
-        </div>
-      )}
-      {session && (
-        <div style={{ marginLeft: "auto" }}>
-          <button onClick={handleLogout}>Logout</button>
-        </div>
-      )}
-    </div>
+    <Box sx={{ display: "flex" }}>
+      <CssBaseline />
+      <AppBar position="fixed" open={open}>
+        <Toolbar>
+          <Typography variant="h6" noWrap sx={{ mr: "auto" }} component="div">
+            MinimalTasks
+          </Typography>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="end"
+            onClick={handleDrawerOpen}
+            sx={{ ...(open && { display: "none" }) }}
+          >
+            <MenuIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      <Main open={open}>
+        <DrawerHeader />
+        {children}
+      </Main>
+      <Drawer
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: drawerWidth,
+          },
+        }}
+        elevation={0}
+        variant="persistent"
+        anchor="right"
+        open={open}
+      >
+        <DrawerHeader>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === "rtl" ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
+          </IconButton>
+        </DrawerHeader>
+        <Divider />
+        {!session && (
+          <List>
+            {initialSideBar.map((el, index) => (
+              <ListItem key={el.text} disablePadding>
+                <ListItemButton onClick={el.onClick}>
+                  <ListItemIcon>{el.icon}</ListItemIcon>
+                  <ListItemText primary={el.text} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        )}
+        {session && (
+          <div>
+            <List>
+              {initialCategorySideBar.map((el, index) => (
+                <ListItem key={el.text} disablePadding>
+                  <ListItemButton onClick={el.onClick}>
+                    <ListItemIcon>{el.icon}</ListItemIcon>
+                    <ListItemText primary={el.text} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+            <Divider />
+            <List>
+              {["Work", "Life", "College"].map((text, index) => (
+                <ListItem key={text} disablePadding>
+                  <ListItemButton>
+                    <ListItemIcon>
+                      {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                    </ListItemIcon>
+                    <ListItemText primary={text} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+              <button style={{ margin: "1em 0" }} onClick={handleLogout}>
+                Logout
+              </button>
+            </List>
+          </div>
+        )}
+      </Drawer>
+    </Box>
   );
 }
-
-export default NavBar;

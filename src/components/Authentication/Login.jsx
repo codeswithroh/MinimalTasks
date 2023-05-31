@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSession } from "../../hooks/context";
-import NavBar from "../NavBar";
 
 const Login = ({ appWriteAccount }) => {
   const { session, setSession } = useSession();
@@ -16,7 +15,7 @@ const Login = ({ appWriteAccount }) => {
         password
       );
       setSession(response);
-      navigate("/");
+      navigate("/tasks/incomplete");
     } catch (error) {
       console.log(error); // Failure
     }
@@ -33,7 +32,6 @@ const Login = ({ appWriteAccount }) => {
 
   return (
     <div style={{ margin: "auto 0" }}>
-      <NavBar />
       <form className="flex-col form" onSubmit={handleSubmit}>
         <input
           type="email"

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import { useSession } from "../../hooks/context";
 import { ID } from "appwrite";
 import Card from "@mui/material/Card";
@@ -7,15 +8,18 @@ import {
   CardActions,
   CardContent,
   CardHeader,
+  Chip,
   IconButton,
   TextField,
 } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CustomModal from "../../utils/custom/CustomModal";
+import { convertTime24To12 } from "../../utils/customService/DateTimeService";
 
 function AddTasks({ databases, fetchTasks }) {
   const { session } = useSession();
+  const { category } = useParams();
   const [taskInput, setTaskInput] = useState("");
   const [dueDateInput, setDueDateInput] = useState("");
   const [dueTimeInput, setDueTimeInput] = useState("");
@@ -32,7 +36,7 @@ function AddTasks({ databases, fetchTasks }) {
         userId: session?.userId,
         title: taskInput,
         done: false,
-        important: false,
+        important: category === "important" ? true : false,
         dueDate: dueDateInput,
         dueTime: dueTimeInput,
       }
@@ -40,7 +44,7 @@ function AddTasks({ databases, fetchTasks }) {
     setTaskInput("");
     setDueDateInput("");
     setDueTimeInput("");
-    fetchTasks();
+    fetchTasks(category);
   };
 
   const openDateModal = () => {
@@ -93,7 +97,7 @@ function AddTasks({ databases, fetchTasks }) {
       <Card
         sx={{
           mb: "2em",
-          mt: "5em",
+          mt: "2em",
           width: "50vw",
         }}
       >
@@ -111,10 +115,21 @@ function AddTasks({ databases, fetchTasks }) {
         </CardContent>
         <CardActions disableSpacing>
           <IconButton onClick={openDateModal} aria-label="add to favorites">
-            <CalendarMonthIcon />
+            {dueDateInput ? (
+              <Chip icon={<CalendarMonthIcon />} label={dueDateInput} />
+            ) : (
+              <CalendarMonthIcon />
+            )}
           </IconButton>
           <IconButton onClick={openTimeModal} aria-label="share">
-            <AccessTimeIcon />
+            {dueTimeInput ? (
+              <Chip
+                icon={<AccessTimeIcon />}
+                label={convertTime24To12(dueTimeInput)}
+              />
+            ) : (
+              <AccessTimeIcon />
+            )}
           </IconButton>
           <Button
             onClick={addTask}

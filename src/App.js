@@ -9,6 +9,7 @@ import { Client, Account } from "appwrite";
 import { useNavigate } from "react-router-dom";
 import { SessionProvider, useSession } from "./hooks/context";
 
+const NavBar = lazy(() => import("./components/NavBar"));
 const Tasks = lazy(() => import("./components/Tasks/index"));
 const SignUp = lazy(() => import("./components/Authentication/SignUp"));
 const Login = lazy(() => import("./components/Authentication/Login"));
@@ -35,22 +36,32 @@ const ProtectedRoute = ({ children }) => {
 function App() {
   const router = createBrowserRouter([
     {
-      path: "/",
+      path: "/tasks/:category",
       exact: true,
       element: (
         <ProtectedRoute>
-          <Tasks />
+          <NavBar>
+            <Tasks />
+          </NavBar>
         </ProtectedRoute>
       ),
     },
     {
       path: "/signup",
-      element: <SignUp appWriteAccount={appWriteAccount} />,
+      element: (
+        <NavBar>
+          <SignUp appWriteAccount={appWriteAccount} />
+        </NavBar>
+      ),
     },
     {
       path: "/login",
       exact: true,
-      element: <Login appWriteAccount={appWriteAccount} />,
+      element: (
+        <NavBar>
+          <Login appWriteAccount={appWriteAccount} />
+        </NavBar>
+      ),
     },
   ]);
 

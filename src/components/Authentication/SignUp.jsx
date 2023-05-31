@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ID } from "appwrite";
-import NavBar from "../NavBar";
 
 function SignUp({ appWriteAccount }) {
   const navigate = useNavigate();
@@ -31,7 +30,6 @@ function SignUp({ appWriteAccount }) {
 
   return (
     <div style={{ margin: "auto 0" }}>
-      <NavBar />
       <form className="flex-col form" onSubmit={handleSubmit}>
         <input
           placeholder="Name"
