@@ -9,6 +9,7 @@ import { Client, Account } from "appwrite";
 import { useNavigate } from "react-router-dom";
 import { SessionProvider, useSession } from "./hooks/context";
 
+const ErrorPage = lazy(() => import("./components/ErrorPage"));
 const NavBar = lazy(() => import("./components/NavBar"));
 const Tasks = lazy(() => import("./components/Tasks/index"));
 const SignUp = lazy(() => import("./components/Authentication/SignUp"));
@@ -28,6 +29,7 @@ const ProtectedRoute = ({ children }) => {
     if (!session) {
       navigate("/login");
     }
+    navigate("/tasks/incomplete");
   }, [session, navigate]);
 
   return children;
@@ -62,6 +64,10 @@ function App() {
           <Login appWriteAccount={appWriteAccount} />
         </NavBar>
       ),
+    },
+    {
+      path: "*",
+      element: <ErrorPage />,
     },
   ]);
 
