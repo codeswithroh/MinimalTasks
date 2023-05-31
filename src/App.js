@@ -6,7 +6,7 @@ import "./assets/styles/font.style.css";
 import "./assets/styles/component.style.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Client, Account } from "appwrite";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { SessionProvider, useSession } from "./hooks/context";
 
 const ErrorPage = lazy(() => import("./components/ErrorPage"));
@@ -29,7 +29,6 @@ const ProtectedRoute = ({ children }) => {
     if (!session) {
       navigate("/login");
     }
-    navigate("/tasks/incomplete");
   }, [session, navigate]);
 
   return children;
@@ -37,6 +36,10 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
   const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Navigate to="/tasks/incomplete" />,
+    },
     {
       path: "/tasks/:category",
       exact: true,
