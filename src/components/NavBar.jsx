@@ -168,8 +168,8 @@ export default function NavBar({ children }) {
         </Toolbar>
       </AppBar>
       <Main open={open}>
-        <DrawerHeader />
         {children}
+        <DrawerHeader />
       </Main>
       <Drawer
         sx={{

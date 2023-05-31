@@ -97,8 +97,11 @@ function AddTasks({ databases, fetchTasks }) {
       <Card
         sx={{
           mb: "2em",
-          mt: "2em",
+          mt: "4em",
           width: "50vw",
+          "@media (max-width:768px)": {
+            width: "20em",
+          },
         }}
       >
         <CardContent>

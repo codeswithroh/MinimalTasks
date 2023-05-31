@@ -29,7 +29,13 @@ function ShowTasks({ databases, fetchTasks, tasks }) {
   };
 
   return (
-    <div style={{ height: "60vh", overflowY: "scroll" }}>
+    <div
+      style={{
+        height: "60vh",
+        overflowY: "scroll",
+        "@media (max-width:768px)": { height: "30em" },
+      }}
+    >
       <div
         style={{
           marginBottom: "1em",
@@ -37,7 +43,14 @@ function ShowTasks({ databases, fetchTasks, tasks }) {
         className="flex-col"
       >
         {tasks.map((task) => (
-          <Card sx={{ width: "50vw", background: "#ebeaeb" }} key={task.$id}>
+          <Card
+            sx={{
+              width: "50vw",
+              background: "#ebeaeb",
+              "@media (max-width:768px)": { width: "20em" },
+            }}
+            key={task.$id}
+          >
             <CardContent>
               <div className="flex-row-start">
                 <div>
@@ -61,13 +74,19 @@ function ShowTasks({ databases, fetchTasks, tasks }) {
               </div>
             </CardContent>
             <CardActions>
-              <Chip icon={<CalendarMonthIcon />} label={task?.dueDate} />
               <Chip
+                className="mobile-font"
+                icon={<CalendarMonthIcon />}
+                label={task?.dueDate}
+              />
+              <Chip
+                className="mobile-font"
                 icon={<AccessTimeIcon />}
                 label={convertTime24To12(task?.dueTime)}
               />
               <Button
                 color="warning"
+                className="mobile-font"
                 onClick={() => deleteTask(task.$id)}
                 sx={{
                   ml: "auto",

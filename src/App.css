@@ -9,6 +9,12 @@
   align-items: center;
 }
 
+@media (max-width: 768px) {
+  .mobile-font {
+    font-size: 0.6em !important;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 12px;
 }
