@@ -23,7 +23,6 @@ import { useSession } from "../hooks/context";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import LoginIcon from "@mui/icons-material/Login";
 import AssignmentIcon from "@mui/icons-material/Assignment";
-import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import AssignmentLateIcon from "@mui/icons-material/AssignmentLate";
 
 const drawerWidth = 240;
@@ -106,22 +105,13 @@ export default function NavBar({ children }) {
 
   const initialCategorySideBar = [
     {
-      text: "Incomplete",
+      text: "My Tasks",
       icon: (
         <IconButton aria-label="incomplete">
           <AssignmentIcon />
         </IconButton>
       ),
       onClick: () => navigate("/tasks/incomplete"),
-    },
-    {
-      text: "Completed",
-      icon: (
-        <IconButton aria-label="complete">
-          <AssignmentTurnedInIcon />
-        </IconButton>
-      ),
-      onClick: () => navigate("/tasks/complete"),
     },
     {
       text: "Important",
@@ -181,6 +171,7 @@ export default function NavBar({ children }) {
         }}
         elevation={0}
         variant="persistent"
+        hideBackdrop={false}
         anchor="right"
         open={open}
       >

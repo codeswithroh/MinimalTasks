@@ -16,6 +16,7 @@ function Tasks() {
   const databases = new Databases(client);
 
   const [tasks, setTasks] = useState([]);
+  const [completedTasks, setCompletedTasks] = useState([]);
 
   const fetchTasks = async (queryParams) => {
     const query = [Query.equal("userId", [`${session?.userId}`])];
@@ -24,6 +25,9 @@ function Tasks() {
     }
     if (queryParams === "complete") {
       query.push(Query.equal("done", true));
+    }
+    if (queryParams === "important") {
+      query.push(Query.equal("important", true));
     }
 
     const res = await databases.listDocuments(
@@ -34,14 +38,45 @@ function Tasks() {
     setTasks(res.documents);
   };
 
+  const fetchCompletedTasks = async (queryParams) => {
+    const query = [Query.equal("userId", [`${session?.userId}`])];
+    if (queryParams === "incomplete") {
+      query.push(Query.equal("done", true));
+    }
+    if (queryParams === "important") {
+      query.push(Query.equal("important", true));
+      query.push(Query.equal("done", true));
+    }
+
+    const res = await databases.listDocuments(
+      "6470526679415457d3f1",
+      "64705278328cb66c07fd",
+      query
+    );
+    setCompletedTasks(res.documents);
+  };
+
   useEffect(() => {
     fetchTasks(category);
+    fetchCompletedTasks(category);
   }, [category]);
 
   return (
-    <div style={{ marginBottom: "2em" }}>
+    <div
+      style={{
+        width: "98vw",
+        marginLeft: "2em",
+        marginRight: "2em",
+      }}
+    >
       <AddTasks databases={databases} fetchTasks={fetchTasks} />
-      <ShowTasks databases={databases} fetchTasks={fetchTasks} tasks={tasks} />
+      <ShowTasks
+        databases={databases}
+        fetchTasks={fetchTasks}
+        fetchCompletedTasks={fetchCompletedTasks}
+        tasks={tasks}
+        completedTasks={completedTasks}
+      />
     </div>
   );
 }

@@ -96,25 +96,23 @@ function AddTasks({ databases, fetchTasks }) {
       </CustomModal>
       <Card
         sx={{
+          width: "98%",
           mb: "2em",
           mt: "4em",
-          width: "50vw",
-          "@media (max-width:768px)": {
-            width: "20em",
-          },
+          mx: "auto",
         }}
       >
         <CardContent>
-          <form className="flex-col">
-            <TextField
-              fullWidth
-              id="standard-basic"
-              label="Enter Task"
-              variant="standard"
-              value={taskInput}
-              onChange={(e) => setTaskInput(e.target.value)}
-            />
-          </form>
+          {/* <form className="flex-col"> */}
+          <TextField
+            fullWidth
+            id="standard-basic"
+            label="Enter Task"
+            variant="standard"
+            value={taskInput}
+            onChange={(e) => setTaskInput(e.target.value)}
+          />
+          {/* </form> */}
         </CardContent>
         <CardActions disableSpacing>
           <IconButton onClick={openDateModal} aria-label="add to favorites">
