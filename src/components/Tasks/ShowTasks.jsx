@@ -80,7 +80,7 @@ function ShowTasks({
       <List
         sx={{
           overflow: "auto",
-          maxHeight: 300,
+          maxHeight: 250,
           mb: "2em",
           "@media (max-width:768px)": { maxHeight: 520 },
         }}

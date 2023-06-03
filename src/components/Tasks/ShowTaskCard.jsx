@@ -46,11 +46,14 @@ function ShowTaskCard({ tasks, updateTask, deleteTask, makeTaskImportant }) {
                   <ListItemText
                     sx={{
                       fontSize: "1.2em",
+                      textDecoration: `${task?.done ? "line-through" : "none"}`,
                       "@media (max-width:768px)": { fontSize: "1em" },
                     }}
-                    primaryTypographyProps={{ fontSize: "1em" }}
+                    primaryTypographyProps={{
+                      fontSize: "1em",
+                    }}
                     id={index}
-                    primary={tasks.done ? <s>{task.title}</s> : task.title}
+                    primary={task.title}
                   />
                   <ListItemIcon
                     onClick={() => makeTaskImportant(task.$id, !task.important)}
