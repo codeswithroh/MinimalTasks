@@ -1,25 +1,38 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ID } from "appwrite";
+import toast from "react-hot-toast";
 
 function SignUp({ appWriteAccount }) {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const signUpWithEmail = async (email, password, name) => {
     try {
+      const toastLoading = toast.loading("Loading...");
+      setLoading(true);
+
       const response = await appWriteAccount.create(
         ID.unique(),
         email,
         password,
         name
       );
-      console.log(response);
+
+      toast.dismiss(toastLoading);
+      if (!!response) {
+        toast.success("Logged in successfully");
+      } else {
+        toast.error("Something went wrong");
+      }
+
+      setLoading(false);
       navigate("/login");
     } catch (error) {
-      console.log(error); // Failure
+      toast.error(error);
     }
   };
 
@@ -48,7 +61,9 @@ function SignUp({ appWriteAccount }) {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Sign Up</button>
+        <button disabled={loading} type="submit">
+          Sign Up
+        </button>
       </form>
     </div>
   );

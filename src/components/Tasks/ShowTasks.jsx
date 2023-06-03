@@ -13,7 +13,10 @@ import ShowTaskCard from "./ShowTaskCard";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
-// import AlertService from "../../utils/customService/AlertService";
+import {
+  deleteDocument,
+  updateDocuments,
+} from "../../utils/ApiServices/BaseService";
 
 function ShowTasks({
   databases,
@@ -27,38 +30,38 @@ function ShowTasks({
   const [showCompletedTasks, setShowCompletedTasks] = useState(false);
 
   const updateTask = async (id, done) => {
-    await databases.updateDocument(
-      "6470526679415457d3f1",
+    await updateDocuments(
       "64705278328cb66c07fd",
       id,
       {
         done,
-      }
+      },
+      "Task updated successfully"
     );
-    // AlertService("Task updated successfully", "success");
 
     fetchTasks(category);
     fetchCompletedTasks(category);
   };
 
   const deleteTask = async (id) => {
-    await databases.deleteDocument(
-      "6470526679415457d3f1",
+    await deleteDocument(
       "64705278328cb66c07fd",
-      id
+      id,
+      "Task deleted successfully"
     );
+
     fetchTasks(category);
     fetchCompletedTasks(category);
   };
 
   const makeTaskImportant = async (id, important) => {
-    await databases.updateDocument(
-      "6470526679415457d3f1",
+    await updateDocuments(
       "64705278328cb66c07fd",
       id,
       {
         important,
-      }
+      },
+      "Task made important successfully"
     );
     fetchTasks(category);
   };
@@ -71,13 +74,15 @@ function ShowTasks({
     <Box
       sx={{
         width: "100%",
+        mb: "2em",
       }}
     >
       <List
         sx={{
           overflow: "auto",
-          maxHeight: 350,
-          "@media (max-width:768px)": { maxHeight: 550 },
+          maxHeight: 300,
+          mb: "2em",
+          "@media (max-width:768px)": { maxHeight: 520 },
         }}
       >
         <ShowTaskCard

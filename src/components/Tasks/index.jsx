@@ -5,6 +5,7 @@ import AddTasks from "./AddTasks";
 import ShowTasks from "./ShowTasks";
 import { useSession } from "../../hooks/context";
 import { useParams } from "react-router-dom";
+import { Typography } from "@mui/material";
 
 const client = new Client()
   .setEndpoint("https://cloud.appwrite.io/v1")
@@ -69,6 +70,14 @@ function Tasks() {
         marginRight: "2em",
       }}
     >
+      <Typography
+        sx={{ mt: "3em", ml: "0.8em" }}
+        variant="h5"
+        align="left"
+        gutterBottom
+      >
+        {category === "important" ? "Important Tasks" : "My Tasks"}
+      </Typography>
       <AddTasks databases={databases} fetchTasks={fetchTasks} />
       <ShowTasks
         databases={databases}

@@ -1,12 +1,16 @@
 import { Alert, Snackbar } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const AlertService = (message, category) => {
-  const [open, setOpen] = useState(true);
+function AlertService(message, category) {
+  const [open, setOpen] = useState(false);
 
   const handleClose = () => {
     setOpen(false);
   };
+
+  useEffect(() => {
+    setOpen(true);
+  }, []);
 
   return (
     <Snackbar
@@ -20,6 +24,6 @@ const AlertService = (message, category) => {
       </Alert>
     </Snackbar>
   );
-};
+}
 
 export default AlertService;

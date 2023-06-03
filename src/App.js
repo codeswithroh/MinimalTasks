@@ -8,6 +8,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Client, Account } from "appwrite";
 import { useNavigate, Navigate } from "react-router-dom";
 import { SessionProvider, useSession } from "./hooks/context";
+import { Toaster } from "react-hot-toast";
 
 const ErrorPage = lazy(() => import("./components/ErrorPage"));
 const NavBar = lazy(() => import("./components/NavBar"));
@@ -77,6 +78,34 @@ function App() {
   return (
     <Suspense fallback={<>Loading...</>}>
       <div className="App">
+        <Toaster
+          position="bottom-right"
+          toastOptions={{
+            // Define default options
+            className: "",
+            duration: 5000,
+            style: {
+              background: "#363636",
+              color: "#fff",
+            },
+
+            // Default options for specific types
+            success: {
+              duration: 3000,
+              theme: {
+                primary: "green",
+                secondary: "black",
+              },
+            },
+            error: {
+              duration: 3000,
+              theme: {
+                primary: "red",
+                secondary: "black",
+              },
+            },
+          }}
+        />
         <SessionProvider>
           <RouterProvider router={router} />
         </SessionProvider>

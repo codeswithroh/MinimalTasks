@@ -1,29 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSession } from "../../hooks/context";
+import toast from "react-hot-toast";
 
 const Login = ({ appWriteAccount }) => {
-  const { session, setSession } = useSession();
+  const { setSession } = useSession();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const loginWithEmail = async (email, password) => {
     try {
+      const toastLoading = toast.loading("Loading...");
+      setLoading(true);
       const response = await appWriteAccount.createEmailSession(
         email,
         password
       );
+
+      toast.dismiss(toastLoading);
+      if (!!response) {
+        toast.success("Logged in successfully");
+      } else {
+        toast.error("Something went wrong");
+      }
       setSession(response);
+      setLoading(false);
       navigate("/tasks/incomplete");
     } catch (error) {
-      console.log(error); // Failure
+      toast.error(error);
     }
   };
-
-  useEffect(() => {
-    console.log("context session", session);
-  }, [session]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -45,7 +53,9 @@ const Login = ({ appWriteAccount }) => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Login</button>
+        <button disabled={loading} type="submit">
+          Login
+        </button>
       </form>
     </div>
   );

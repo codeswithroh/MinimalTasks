@@ -31,17 +31,17 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   ({ theme, open }) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
+    marginLeft: "auto",
+    marginRight: "auto",
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    marginRight: -drawerWidth,
     ...(open && {
       transition: theme.transitions.create("margin", {
         easing: theme.transitions.easing.easeOut,
         duration: theme.transitions.duration.enteringScreen,
       }),
-      marginRight: 0,
     }),
   })
 );
@@ -50,7 +50,7 @@ const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
   backgroundColor: "transparent",
-  boxShadow: "none",
+  // boxShadow: "none",
   color: "black",
   transition: theme.transitions.create(["margin", "width"], {
     easing: theme.transitions.easing.sharp,
@@ -143,7 +143,12 @@ export default function NavBar({ children }) {
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar>
-          <Typography variant="h6" noWrap sx={{ mr: "auto" }} component="div">
+          <Typography
+            variant="h6"
+            noWrap
+            sx={{ mr: "auto", fontStyle: "italic" }}
+            component="div"
+          >
             MinimalTasks
           </Typography>
           <IconButton
@@ -163,15 +168,15 @@ export default function NavBar({ children }) {
       </Main>
       <Drawer
         sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: drawerWidth,
-          },
+          display: { xs: "block", sm: "block" },
+          "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
         }}
         elevation={0}
-        variant="persistent"
-        hideBackdrop={false}
+        variant="temporary"
+        ModalProps={{
+          onClose: handleDrawerClose,
+          keepMounted: true, // Better open performance on mobile.
+        }}
         anchor="right"
         open={open}
       >
@@ -221,7 +226,14 @@ export default function NavBar({ children }) {
                   </ListItemButton>
                 </ListItem>
               ))}
-              <button style={{ margin: "1em 0" }} onClick={handleLogout}>
+              <button
+                style={{
+                  margin: "1em",
+                  width: "90%",
+                  borderRadius: "20px",
+                }}
+                onClick={handleLogout}
+              >
                 Logout
               </button>
             </List>

@@ -16,6 +16,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CustomModal from "../../utils/custom/CustomModal";
 import { convertTime24To12 } from "../../utils/customService/DateTimeService";
+import { createDocuments } from "../../utils/ApiServices/BaseService";
 
 function AddTasks({ databases, fetchTasks }) {
   const { session } = useSession();
@@ -28,8 +29,7 @@ function AddTasks({ databases, fetchTasks }) {
 
   const addTask = async (e) => {
     e.preventDefault();
-    await databases.createDocument(
-      "6470526679415457d3f1",
+    await createDocuments(
       "64705278328cb66c07fd",
       ID.unique(),
       {
@@ -39,8 +39,10 @@ function AddTasks({ databases, fetchTasks }) {
         important: category === "important" ? true : false,
         dueDate: dueDateInput,
         dueTime: dueTimeInput,
-      }
+      },
+      "Task created successfully"
     );
+
     setTaskInput("");
     setDueDateInput("");
     setDueTimeInput("");
@@ -98,7 +100,7 @@ function AddTasks({ databases, fetchTasks }) {
         sx={{
           width: "98%",
           mb: "2em",
-          mt: "4em",
+          mt: "1em",
           mx: "auto",
         }}
       >
