@@ -13,22 +13,22 @@ const client = new Client()
 
 function Tasks() {
   const { session } = useSession();
-  const { category } = useParams();
+  const { type, category } = useParams();
   const databases = new Databases(client);
 
   const [tasks, setTasks] = useState([]);
   const [completedTasks, setCompletedTasks] = useState([]);
 
-  const fetchTasks = async (queryParams) => {
+  const fetchTasks = async (queryParams, _category) => {
     const query = [Query.equal("userId", [`${session?.userId}`])];
-    if (queryParams === "incomplete" || queryParams === "important") {
-      query.push(Query.equal("done", false));
-    }
-    if (queryParams === "complete") {
-      query.push(Query.equal("done", true));
-    }
+    query.push(Query.equal("done", false));
+
     if (queryParams === "important") {
       query.push(Query.equal("important", true));
+    }
+
+    if (_category) {
+      query.push(Query.equal("categories", _category));
     }
 
     const res = await databases.listDocuments(
@@ -39,14 +39,17 @@ function Tasks() {
     setTasks(res.documents);
   };
 
-  const fetchCompletedTasks = async (queryParams) => {
+  const fetchCompletedTasks = async (queryParams, _category) => {
     const query = [Query.equal("userId", [`${session?.userId}`])];
-    if (queryParams === "incomplete") {
-      query.push(Query.equal("done", true));
-    }
+
+    query.push(Query.equal("done", true));
+
     if (queryParams === "important") {
       query.push(Query.equal("important", true));
-      query.push(Query.equal("done", true));
+    }
+
+    if (_category) {
+      query.push(Query.equal("categories", _category));
     }
 
     const res = await databases.listDocuments(
@@ -58,9 +61,9 @@ function Tasks() {
   };
 
   useEffect(() => {
-    fetchTasks(category);
-    fetchCompletedTasks(category);
-  }, [category]);
+    fetchTasks(type, category);
+    fetchCompletedTasks(type, category);
+  }, [type, category]);
 
   return (
     <div
@@ -70,14 +73,26 @@ function Tasks() {
         marginRight: "2em",
       }}
     >
-      <Typography
-        sx={{ mt: "3em", ml: "0.8em" }}
-        variant="h5"
-        align="left"
-        gutterBottom
-      >
-        {category === "important" ? "Important Tasks" : "My Tasks"}
-      </Typography>
+      {!!type && (
+        <Typography
+          sx={{ mt: "3em", ml: "0.8em" }}
+          variant="h5"
+          align="left"
+          gutterBottom
+        >
+          {type === "important" ? "Important Tasks" : "My Tasks"}
+        </Typography>
+      )}
+      {!!category && (
+        <Typography
+          sx={{ mt: "3em", ml: "0.8em" }}
+          variant="h5"
+          align="left"
+          gutterBottom
+        >
+          {category.charAt(0).toUpperCase() + category.slice(1)} Tasks
+        </Typography>
+      )}
       <AddTasks databases={databases} fetchTasks={fetchTasks} />
       <ShowTasks
         databases={databases}

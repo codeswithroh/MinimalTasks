@@ -25,7 +25,7 @@ function ShowTasks({
   tasks,
   completedTasks,
 }) {
-  const { category } = useParams();
+  const { type, category } = useParams();
 
   const [showCompletedTasks, setShowCompletedTasks] = useState(false);
 
@@ -39,8 +39,20 @@ function ShowTasks({
       "Task updated successfully"
     );
 
-    fetchTasks(category);
-    fetchCompletedTasks(category);
+    fetchTasks(type, category);
+    fetchCompletedTasks(type, category);
+  };
+
+  const editTask = async (id, body) => {
+    await updateDocuments(
+      "64705278328cb66c07fd",
+      id,
+      body,
+      "Task edited successfully"
+    );
+
+    fetchTasks(type, category);
+    fetchCompletedTasks(type, category);
   };
 
   const deleteTask = async (id) => {
@@ -50,8 +62,8 @@ function ShowTasks({
       "Task deleted successfully"
     );
 
-    fetchTasks(category);
-    fetchCompletedTasks(category);
+    fetchTasks(type, category);
+    fetchCompletedTasks(type, category);
   };
 
   const makeTaskImportant = async (id, important) => {
@@ -63,7 +75,7 @@ function ShowTasks({
       },
       "Task made important successfully"
     );
-    fetchTasks(category);
+    fetchTasks(type, category);
   };
 
   const handleShowCompletedTasks = () => {
@@ -87,6 +99,7 @@ function ShowTasks({
       >
         <ShowTaskCard
           tasks={tasks}
+          editTask={editTask}
           updateTask={updateTask}
           deleteTask={deleteTask}
           makeTaskImportant={makeTaskImportant}
@@ -111,6 +124,7 @@ function ShowTasks({
           <ShowTaskCard
             tasks={completedTasks}
             updateTask={updateTask}
+            editTask={editTask}
             deleteTask={deleteTask}
             makeTaskImportant={makeTaskImportant}
           />

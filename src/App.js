@@ -9,6 +9,7 @@ import { Client, Account } from "appwrite";
 import { useNavigate, Navigate } from "react-router-dom";
 import { SessionProvider, useSession } from "./hooks/context";
 import { Toaster } from "react-hot-toast";
+import CustomLoader from "./utils/custom/CustomLoader";
 
 const ErrorPage = lazy(() => import("./components/ErrorPage"));
 const NavBar = lazy(() => import("./components/NavBar"));
@@ -42,7 +43,18 @@ function App() {
       element: <Navigate to="/tasks/incomplete" />,
     },
     {
-      path: "/tasks/:category",
+      path: "/tasks/:type",
+      exact: true,
+      element: (
+        <ProtectedRoute>
+          <NavBar>
+            <Tasks />
+          </NavBar>
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/tasks/category/:category",
       exact: true,
       element: (
         <ProtectedRoute>
@@ -76,7 +88,7 @@ function App() {
   ]);
 
   return (
-    <Suspense fallback={<>Loading...</>}>
+    <Suspense fallback={<CustomLoader />}>
       <div className="App">
         <Toaster
           position="bottom-right"

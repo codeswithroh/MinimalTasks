@@ -9,23 +9,30 @@ import {
   CardContent,
   CardHeader,
   Chip,
+  FormControl,
   IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
 } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import StyleIcon from "@mui/icons-material/Style";
 import CustomModal from "../../utils/custom/CustomModal";
 import { convertTime24To12 } from "../../utils/customService/DateTimeService";
 import { createDocuments } from "../../utils/ApiServices/BaseService";
 
 function AddTasks({ databases, fetchTasks }) {
   const { session } = useSession();
-  const { category } = useParams();
+  const { type, category } = useParams();
   const [taskInput, setTaskInput] = useState("");
+  const [categoryInput, setCategoryInput] = useState("");
   const [dueDateInput, setDueDateInput] = useState("");
   const [dueTimeInput, setDueTimeInput] = useState("");
   const [showDateInput, setShowDateInput] = useState(false);
   const [showTimeInput, setShowTimeInput] = useState(false);
+  const [showCategoryInput, setShowCategoryInput] = useState(false);
 
   const addTask = async (e) => {
     e.preventDefault();
@@ -36,9 +43,10 @@ function AddTasks({ databases, fetchTasks }) {
         userId: session?.userId,
         title: taskInput,
         done: false,
-        important: category === "important" ? true : false,
+        important: type === "important" ? true : false,
         dueDate: dueDateInput,
         dueTime: dueTimeInput,
+        categories: categoryInput,
       },
       "Task created successfully"
     );
@@ -46,7 +54,8 @@ function AddTasks({ databases, fetchTasks }) {
     setTaskInput("");
     setDueDateInput("");
     setDueTimeInput("");
-    fetchTasks(category);
+    setCategoryInput("");
+    fetchTasks(type, category);
   };
 
   const openDateModal = () => {
@@ -57,15 +66,22 @@ function AddTasks({ databases, fetchTasks }) {
     setShowTimeInput(true);
   };
 
+  const openCategoryModal = () => {
+    setShowCategoryInput(true);
+  };
+
   return (
     <>
       <CustomModal open={showDateInput} setOpen={setShowDateInput}>
         <Card>
           <CardHeader title="  Enter Due Date" />
           <CardContent>
-            <input
-              style={{ width: "90%" }}
-              className="date-input"
+            <TextField
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              name="dueDate"
+              label="Due Date"
+              margin="dense"
               type="date"
               value={dueDateInput}
               onChange={(e) => setDueDateInput(e.target.value)}
@@ -82,15 +98,52 @@ function AddTasks({ databases, fetchTasks }) {
         <Card>
           <CardHeader title="  Enter Due Time" />
           <CardContent>
-            <input
-              style={{ width: "90%" }}
+            <TextField
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              name="dueTime"
+              label="Due Time"
+              margin="dense"
+              // onChange={handleFormUpdate}
               type="time"
+              sx={{ marginBottom: "1em" }}
               value={dueTimeInput}
               onChange={(e) => setDueTimeInput(e.target.value)}
             />
           </CardContent>
           <CardActions>
             <Button onClick={() => setShowTimeInput(false)} variant="outlined">
+              Ok
+            </Button>
+          </CardActions>
+        </Card>
+      </CustomModal>
+      <CustomModal open={showCategoryInput} setOpen={setShowCategoryInput}>
+        <Card>
+          <CardHeader title="Select Category" />
+          <CardContent>
+            <FormControl fullWidth margin="dense">
+              <InputLabel>Category</InputLabel>
+              <Select
+                name="categories"
+                onChange={(e) => setCategoryInput(e.target.value)}
+                value={categoryInput}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value="work">Work</MenuItem>
+                <MenuItem value="school">School</MenuItem>
+                <MenuItem value="college">College</MenuItem>
+                <MenuItem value="school">School</MenuItem>
+              </Select>
+            </FormControl>
+          </CardContent>
+          <CardActions>
+            <Button
+              onClick={() => setShowCategoryInput(false)}
+              variant="outlined"
+            >
               Ok
             </Button>
           </CardActions>
@@ -132,6 +185,14 @@ function AddTasks({ databases, fetchTasks }) {
               />
             ) : (
               <AccessTimeIcon />
+            )}
+          </IconButton>
+
+          <IconButton onClick={openCategoryModal} aria-label="share">
+            {categoryInput ? (
+              <Chip icon={<StyleIcon />} label={categoryInput} />
+            ) : (
+              <StyleIcon />
             )}
           </IconButton>
           <Button

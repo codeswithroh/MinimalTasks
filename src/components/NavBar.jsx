@@ -17,13 +17,15 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import { useSession } from "../hooks/context";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import LoginIcon from "@mui/icons-material/Login";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import AssignmentLateIcon from "@mui/icons-material/AssignmentLate";
+import SchoolIcon from "@mui/icons-material/School";
+import EngineeringIcon from "@mui/icons-material/Engineering";
+import NightlifeIcon from "@mui/icons-material/Nightlife";
+import WorkIcon from "@mui/icons-material/Work";
 
 const drawerWidth = 240;
 
@@ -124,6 +126,45 @@ export default function NavBar({ children }) {
     },
   ];
 
+  const customisedCategorySideBar = [
+    {
+      text: "Work",
+      icon: (
+        <IconButton aria-label="work">
+          <WorkIcon />
+        </IconButton>
+      ),
+      onClick: () => navigate("/tasks/category/work"),
+    },
+    {
+      text: "Life",
+      icon: (
+        <IconButton aria-label="life">
+          <NightlifeIcon />
+        </IconButton>
+      ),
+      onClick: () => navigate("/tasks/category/life"),
+    },
+    {
+      text: "College",
+      icon: (
+        <IconButton aria-label="college">
+          <EngineeringIcon />
+        </IconButton>
+      ),
+      onClick: () => navigate("/tasks/category/college"),
+    },
+    {
+      text: "School",
+      icon: (
+        <IconButton aria-label="school">
+          <SchoolIcon />
+        </IconButton>
+      ),
+      onClick: () => navigate("/tasks/category/school"),
+    },
+  ];
+
   const handleLogout = () => {
     setSession(null);
     localStorage.removeItem("session");
@@ -216,13 +257,11 @@ export default function NavBar({ children }) {
             </List>
             <Divider />
             <List>
-              {["Work", "Life", "College"].map((text, index) => (
-                <ListItem key={text} disablePadding>
-                  <ListItemButton>
-                    <ListItemIcon>
-                      {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                    </ListItemIcon>
-                    <ListItemText primary={text} />
+              {customisedCategorySideBar.map((el, index) => (
+                <ListItem key={el?.text} disablePadding>
+                  <ListItemButton onClick={el?.onClick}>
+                    <ListItemIcon>{el?.icon}</ListItemIcon>
+                    <ListItemText primary={el?.text} />
                   </ListItemButton>
                 </ListItem>
               ))}
