@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSession } from "../../hooks/context";
+import { Card, CardContent, Typography } from "@mui/material";
 import toast from "react-hot-toast";
 
 const Login = ({ appWriteAccount }) => {
@@ -39,25 +40,39 @@ const Login = ({ appWriteAccount }) => {
   };
 
   return (
-    <div style={{ margin: "auto 0" }}>
-      <form className="flex-col form" onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button disabled={loading} type="submit">
+    <Card sx={{ margin: "5em 0" }}>
+      <CardContent>
+        <Typography variant="h4" component="div">
           Login
-        </button>
-      </form>
-    </div>
+        </Typography>
+        <form className="flex-col form" onSubmit={handleSubmit}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button disabled={loading} type="submit">
+            Login
+          </button>
+        </form>
+
+        <Typography
+          sx={{ cursor: "pointer" }}
+          onClick={() => navigate("/signup")}
+          variant="body2"
+          color="text.secondary"
+        >
+          Don't have an account yet? Signup
+        </Typography>
+      </CardContent>
+    </Card>
   );
 };
 

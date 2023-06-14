@@ -46,7 +46,7 @@ function AddTasks({ databases, fetchTasks }) {
         important: type === "important" ? true : false,
         dueDate: dueDateInput,
         dueTime: dueTimeInput,
-        categories: categoryInput,
+        categories: categoryInput || category,
       },
       "Task created successfully"
     );

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Card, CardContent, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ID } from "appwrite";
 import toast from "react-hot-toast";
@@ -42,30 +43,44 @@ function SignUp({ appWriteAccount }) {
   };
 
   return (
-    <div style={{ margin: "auto 0" }}>
-      <form className="flex-col form" onSubmit={handleSubmit}>
-        <input
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button disabled={loading} type="submit">
-          Sign Up
-        </button>
-      </form>
-    </div>
+    <Card sx={{ margin: "5em 0" }}>
+      <CardContent>
+        <Typography variant="h4" component="div">
+          Signup
+        </Typography>
+
+        <form className="flex-col form" onSubmit={handleSubmit}>
+          <input
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button disabled={loading} type="submit">
+            Sign Up
+          </button>
+        </form>
+        <Typography
+          sx={{ cursor: "pointer" }}
+          onClick={() => navigate("/login")}
+          variant="body2"
+          color="text.secondary"
+        >
+          Already have an account yet? Login
+        </Typography>
+      </CardContent>
+    </Card>
   );
 }
 
